@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pokemon Index{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+    <style>
+        .pokemon-card {
+            transition: transform 0.2s;
+        }
+        .pokemon-card:hover {
+            transform: translateY(-4px);
+        }
+        .type-normal { @apply bg-gray-400; }
+        .type-fire { @apply bg-red-500; }
+        .type-water { @apply bg-blue-500; }
+        .type-electric { @apply bg-yellow-400; }
+        .type-grass { @apply bg-green-500; }
+        .type-ice { @apply bg-blue-300; }
+        .type-fighting { @apply bg-red-700; }
+        .type-poison { @apply bg-purple-500; }
+        .type-ground { @apply bg-yellow-600; }
+        .type-flying { @apply bg-indigo-400; }
+        .type-psychic { @apply bg-pink-500; }
+        .type-bug { @apply bg-green-400; }
+        .type-rock { @apply bg-yellow-800; }
+        .type-ghost { @apply bg-purple-700; }
+        .type-dragon { @apply bg-indigo-700; }
+        .type-dark { @apply bg-gray-800; }
+        .type-steel { @apply bg-gray-500; }
+        .type-fairy { @apply bg-pink-300; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold">🔴 Pokédex</h1>
+            <p class="text-blue-100">Discover and explore Pokemon</p>
+        </div>
+    </header>
+    
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Pokemon Index - Powered by <a href="https://pokeapi.co" class="text-blue-300 hover:underline">PokeAPI</a></p>
+        </div>
+    </footer>
+</body>
+</html> 

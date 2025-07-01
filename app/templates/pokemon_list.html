@@ -1,0 +1,25 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {% for pokemon in pokemon %}
+    <div class="pokemon-card bg-white rounded-lg shadow-lg p-6 text-center">
+        <div class="mb-4">
+            <img src="{{ pokemon.sprite }}" alt="{{ pokemon.name }}" class="w-24 h-24 mx-auto">
+        </div>
+        
+        <h3 class="text-xl font-bold text-gray-800 mb-2">
+            #{{ "%03d"|format(pokemon.id) }} {{ pokemon.name }}
+        </h3>
+        
+        <div class="flex flex-wrap justify-center gap-2">
+            {% for type in pokemon.types %}
+            <span class="type-{{ type }} text-white text-xs px-2 py-1 rounded-full font-medium">
+                {{ type.title() }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="text-center mt-8">
+    <p class="text-gray-600">Showing {{ pokemon|length }} Pokemon</p>
+</div> 

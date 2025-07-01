@@ -1,0 +1,12 @@
+So i want to use and learn https://github.com/litestar-org/litestar
+Take small step in the beginning.
+
+Step 1.
+Get a website up and running.
+
+Step 2.
+We will be using pokeapi https://pokeapi.co/
+HTML with using htmx https://htmx.org/ 
+For CCS tailwind.
+The project is to make a pokemon index page inspiration Pokedex https://github.com/Ade-mir/pokedex-tutorial
+Make some step to get step 1 and 2 up running with minimal stuff as a test 
