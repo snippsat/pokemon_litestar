@@ -1,54 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Pokemon Index{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.8"></script>
     <style>
-        .pokemon-card {
-            transition: transform 0.2s;
+      /* Dark theme custom styles */
+      body {
+        background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 75%, #000000 100%);
+        min-height: 100vh;
+        background-attachment: fixed;
+      }
+
+      /* Pokemon card dark theme */
+      .pokemon-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        backdrop-filter: blur(10px);
+        background: linear-gradient(145deg, rgba(40, 40, 45, 0.95), rgba(60, 60, 70, 0.9));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      }
+
+      .pokemon-card:hover {
+        transform: translateY(-12px) scale(1.05);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.3);
+        border: 1px solid rgba(99, 102, 241, 0.4);
+      }
+
+      .pokemon-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        border-radius: inherit;
+      }
+
+      .pokemon-card:hover::before {
+        opacity: 1;
+      }
+
+      /* Enhanced dark theme type colors with glow effects */
+      .type-normal {
+        background: linear-gradient(135deg, #6b7280, #9ca3af);
+        box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4);
+      }
+      .type-fire {
+        background: linear-gradient(135deg, #dc2626, #f59e0b);
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+      }
+      .type-water {
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+      }
+      .type-electric {
+        background: linear-gradient(135deg, #eab308, #fbbf24);
+        box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
+      }
+      .type-grass {
+        background: linear-gradient(135deg, #059669, #10b981);
+        box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+      }
+      .type-ice {
+        background: linear-gradient(135deg, #0891b2, #06b6d4);
+        box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
+      }
+      .type-fighting {
+        background: linear-gradient(135deg, #b91c1c, #dc2626);
+        box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4);
+      }
+      .type-poison {
+        background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+      }
+      .type-ground {
+        background: linear-gradient(135deg, #a16207, #ca8a04);
+        box-shadow: 0 4px 15px rgba(161, 98, 7, 0.4);
+      }
+      .type-flying {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+      }
+      .type-psychic {
+        background: linear-gradient(135deg, #db2777, #ec4899);
+        box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4);
+      }
+      .type-bug {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+        box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
+      }
+      .type-rock {
+        background: linear-gradient(135deg, #92400e, #b45309);
+        box-shadow: 0 4px 15px rgba(146, 64, 14, 0.4);
+      }
+      .type-ghost {
+        background: linear-gradient(135deg, #581c87, #6b21a8);
+        box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+      }
+      .type-dragon {
+        background: linear-gradient(135deg, #3730a3, #4338ca);
+        box-shadow: 0 4px 15px rgba(55, 48, 163, 0.4);
+      }
+      .type-dark {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        box-shadow: 0 4px 15px rgba(31, 41, 55, 0.4);
+      }
+      .type-steel {
+        background: linear-gradient(135deg, #4b5563, #6b7280);
+        box-shadow: 0 4px 15px rgba(75, 85, 99, 0.4);
+      }
+      .type-fairy {
+        background: linear-gradient(135deg, #ec4899, #f472b6);
+        box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+      }
+
+      /* Glowing button effects */
+      .btn-glow {
+        background: linear-gradient(135deg, #4338ca, #7c3aed);
+        box-shadow: 0 4px 15px rgba(67, 56, 202, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .btn-glow:hover {
+        box-shadow: 0 8px 25px rgba(67, 56, 202, 0.6), 0 0 20px rgba(124, 58, 237, 0.3);
+        transform: translateY(-2px);
+      }
+
+      /* Loading animation with glow */
+      .loading-glow {
+        animation: pulse-glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes pulse-glow {
+        from {
+          box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
         }
-        .pokemon-card:hover {
-            transform: translateY(-4px);
+        to {
+          box-shadow: 0 0 30px rgba(99, 102, 241, 0.8);
         }
-        .type-normal { @apply bg-gray-400; }
-        .type-fire { @apply bg-red-500; }
-        .type-water { @apply bg-blue-500; }
-        .type-electric { @apply bg-yellow-400; }
-        .type-grass { @apply bg-green-500; }
-        .type-ice { @apply bg-blue-300; }
-        .type-fighting { @apply bg-red-700; }
-        .type-poison { @apply bg-purple-500; }
-        .type-ground { @apply bg-yellow-600; }
-        .type-flying { @apply bg-indigo-400; }
-        .type-psychic { @apply bg-pink-500; }
-        .type-bug { @apply bg-green-400; }
-        .type-rock { @apply bg-yellow-800; }
-        .type-ghost { @apply bg-purple-700; }
-        .type-dragon { @apply bg-indigo-700; }
-        .type-dark { @apply bg-gray-800; }
-        .type-steel { @apply bg-gray-500; }
-        .type-fairy { @apply bg-pink-300; }
+      }
+
+      /* Smooth animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .pokemon-card {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      /* Sparkle effect enhanced for dark theme */
+      .pokemon-card:hover::after {
+        content: "✨";
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.4rem;
+        animation: sparkle 1s ease-in-out infinite;
+        z-index: 10;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+      }
+
+      @keyframes sparkle {
+        0%, 100% {
+          opacity: 0;
+          transform: scale(0.5) rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.2) rotate(180deg);
+        }
+      }
+
+      /* Header glow effect */
+      .header-glow {
+        background: linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95);
+        box-shadow: 0 4px 30px rgba(79, 70, 229, 0.3);
+      }
+
+      /* Text shadows for better readability */
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(30, 30, 30, 0.3);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #4338ca, #7c3aed);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #3730a3, #6b21a8);
+      }
     </style>
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <header class="bg-blue-600 text-white p-4 shadow-lg">
-        <div class="container mx-auto">
-            <h1 class="text-3xl font-bold">🔴 Pokédex</h1>
-            <p class="text-blue-100">Discover and explore Pokemon</p>
-        </div>
+  </head>
+  <body class="min-h-screen">
+    <header class="header-glow text-white p-6 shadow-2xl backdrop-blur-sm">
+      <div class="container mx-auto">
+        <h1 class="text-4xl font-bold text-shadow mb-2">🔴 Pokédex</h1>
+        <p class="text-indigo-200 text-lg">Discover and explore Pokémon in the darkness</p>
+      </div>
     </header>
-    
+
     <main class="container mx-auto px-4 py-8">
-        {% block content %}{% endblock %}
+      {% block content %}{% endblock %}
     </main>
-    
-    <footer class="bg-gray-800 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Pokemon Index - Powered by <a href="https://pokeapi.co" class="text-blue-300 hover:underline">PokeAPI</a></p>
-        </div>
+
+    <!-- Modal Container -->
+    <div id="pokemon-modal"></div>
+
+    <footer class="bg-gradient-to-r from-gray-900 to-black text-white p-6 mt-12 backdrop-blur-sm">
+      <div class="container mx-auto text-center">
+        <p class="text-gray-300">
+          &copy; 2024 Pokémon Index - Powered by
+          <a href="https://pokeapi.co" class="text-indigo-400 hover:text-indigo-300 transition duration-200 hover:underline">
+            PokéAPI
+          </a>
+        </p>
+      </div>
     </footer>
-</body>
-</html> 
+
+    <script>
+      // Global function to open Pokemon modal
+      function openPokemonModal(pokemonId) {
+        fetch(`/pokemon/${pokemonId}`)
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('pokemon-modal').innerHTML = html;
+          })
+          .catch(error => {
+            console.error('Error loading Pokemon details:', error);
+          });
+      }
+
+      // Global function to close Pokemon modal
+      function closeModal() {
+        document.getElementById('pokemon-modal').innerHTML = '';
+      }
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>

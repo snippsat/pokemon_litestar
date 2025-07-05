@@ -1,0 +1,181 @@
+<!-- Pokemon Detail Modal -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-sm" onclick="closeModal()">
+  <div class="bg-gray-800 rounded-3xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] border-2 border-gray-400 modal-container" onclick="event.stopPropagation()">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-t-3xl p-6 relative">
+      <button 
+        onclick="closeModal()"
+        class="absolute top-4 right-4 text-white hover:text-gray-300 transition duration-200"
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <div class="flex items-center space-x-6">
+        <div class="text-center">
+          <img 
+            src="{{ pokemon.official_artwork }}" 
+            alt="{{ pokemon.name }}" 
+            class="w-32 h-32 drop-shadow-2xl"
+          />
+        </div>
+        <div class="text-white">
+          <h1 class="text-4xl font-bold mb-2 text-shadow">#{{ "%03d"|format(pokemon.id) }} {{ pokemon.name }}</h1>
+          <div class="flex space-x-2 mb-3">
+            {% for type in pokemon.types %}
+            <span class="type-{{ type }} text-white text-sm px-3 py-1 rounded-full font-bold shadow-lg">
+              {{ type.title() }}
+            </span>
+            {% endfor %}
+          </div>
+          <p class="text-indigo-200 text-lg italic">{{ pokemon.flavor_text }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="overflow-y-auto max-h-[calc(90vh-140px)] scrollable-content">
+      <div class="p-6 space-y-6">
+      <!-- Basic Info -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-gradient-to-br from-blue-900 to-blue-800 rounded-2xl p-4 text-center">
+          <div class="text-blue-300 text-sm font-semibold mb-1">Height</div>
+          <div class="text-white text-2xl font-bold">{{ pokemon.height }} m</div>
+        </div>
+        <div class="bg-gradient-to-br from-green-900 to-green-800 rounded-2xl p-4 text-center">
+          <div class="text-green-300 text-sm font-semibold mb-1">Weight</div>
+          <div class="text-white text-2xl font-bold">{{ pokemon.weight }} kg</div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-900 to-purple-800 rounded-2xl p-4 text-center">
+          <div class="text-purple-300 text-sm font-semibold mb-1">Base EXP</div>
+          <div class="text-white text-2xl font-bold">{{ pokemon.base_experience }}</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="bg-gray-700 rounded-2xl p-6 border-2 border-gray-500">
+        <h3 class="text-2xl font-bold text-white mb-4 text-center text-shadow">
+          📊 Base Stats <span class="text-yellow-400">(Total: {{ pokemon.total_stats }})</span>
+        </h3>
+        <div class="space-y-3">
+          {% for stat in pokemon.stats %}
+          <div class="flex items-center">
+            <div class="w-20 text-white font-semibold text-sm">{{ stat.name }}</div>
+            <div class="flex-1 mx-4">
+              <div class="bg-gray-800 rounded-full h-4 relative overflow-hidden border-2 border-gray-500">
+                <div 
+                  class="bg-yellow-500 h-full rounded-full transition-all duration-1000 ease-out shadow-lg"
+                  style="width: {{ stat.percentage }}%"
+                ></div>
+              </div>
+            </div>
+            <div class="w-12 text-right text-white font-bold text-shadow">{{ stat.base_stat }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Abilities -->
+      <div class="bg-gray-700 rounded-2xl p-6 border-2 border-gray-500">
+        <h3 class="text-2xl font-bold text-white mb-4 text-center text-shadow">⚡ Abilities</h3>
+        <div class="space-y-3">
+          {% for ability in pokemon.abilities %}
+          <div class="bg-indigo-700 rounded-xl p-4 border-2 border-indigo-500">
+            <div class="flex items-center mb-2">
+              <h4 class="text-lg font-bold text-white text-shadow">{{ ability.name }}</h4>
+              {% if ability.is_hidden %}
+              <span class="ml-2 bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">Hidden</span>
+              {% endif %}
+            </div>
+            <p class="text-white text-sm">{{ ability.description }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Moves -->
+      <div class="bg-gray-700 rounded-2xl p-6 border-2 border-gray-500">
+        <h3 class="text-2xl font-bold text-white mb-4 text-center text-shadow">🥊 Sample Moves</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {% for move in pokemon.moves %}
+          <div class="bg-red-700 rounded-xl p-3 text-center border-2 border-red-500">
+            <div class="text-white font-semibold text-sm text-shadow">{{ move.name }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-green-900 to-green-800 rounded-2xl p-4 text-center">
+          <div class="text-green-300 text-sm font-semibold mb-1">Habitat</div>
+          <div class="text-white text-lg font-bold">{{ pokemon.habitat }}</div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-900 to-blue-800 rounded-2xl p-4 text-center">
+          <div class="text-blue-300 text-sm font-semibold mb-1">Generation</div>
+          <div class="text-white text-lg font-bold">{{ pokemon.generation }}</div>
+        </div>
+      </div>
+
+      <!-- Sprite Comparison -->
+      <div class="bg-gradient-to-br from-gray-700 to-gray-600 rounded-2xl p-6 border-2 border-gray-500">
+        <h3 class="text-2xl font-bold text-white mb-4 text-center text-shadow">✨ Sprite Comparison</h3>
+        <div class="flex justify-center space-x-8">
+          <div class="text-center">
+            <img 
+              src="{{ pokemon.sprite }}" 
+              alt="{{ pokemon.name }} Normal" 
+              class="w-32 h-32 bg-gray-700 rounded-2xl p-4 drop-shadow-xl border-2 border-gray-500"
+            />
+            <div class="text-white font-semibold mt-2 text-shadow">Normal</div>
+          </div>
+          <div class="text-center">
+            <img 
+              src="{{ pokemon.sprite_shiny }}" 
+              alt="{{ pokemon.name }} Shiny" 
+              class="w-32 h-32 bg-gray-700 rounded-2xl p-4 drop-shadow-xl border-2 border-yellow-500"
+            />
+            <div class="text-yellow-400 font-semibold mt-2 text-shadow">Shiny ✨</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Custom scrollbar styling for modal */
+  .modal-container {
+    overflow: hidden; /* Hide overflow on the main container */
+  }
+  
+  .scrollable-content {
+    /* Firefox scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  }
+  
+  /* WebKit scrollbar styling */
+  .scrollable-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 12px 0; /* Add margin to prevent scrollbar from going into rounded corners */
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+    background-clip: content-box;
+  }
+</style> 

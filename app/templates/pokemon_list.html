@@ -1,25 +1,83 @@
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    {% for pokemon in pokemon %}
-    <div class="pokemon-card bg-white rounded-lg shadow-lg p-6 text-center">
-        <div class="mb-4">
-            <img src="{{ pokemon.sprite }}" alt="{{ pokemon.name }}" class="w-24 h-24 mx-auto">
-        </div>
-        
-        <h3 class="text-xl font-bold text-gray-800 mb-2">
-            #{{ "%03d"|format(pokemon.id) }} {{ pokemon.name }}
-        </h3>
-        
-        <div class="flex flex-wrap justify-center gap-2">
-            {% for type in pokemon.types %}
-            <span class="type-{{ type }} text-white text-xs px-2 py-1 rounded-full font-medium">
-                {{ type.title() }}
-            </span>
-            {% endfor %}
-        </div>
+{% if is_first_load %}
+<div
+  id="pokemon-grid"
+  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
+>
+  {% endif %} {% for pokemon in pokemon %}
+<div class="pokemon-card relative rounded-2xl overflow-hidden transform transition-all duration-300 cursor-pointer hover:scale-105" onclick="openPokemonModal({{ pokemon.id }})">
+  <!-- Card Header with glowing effect -->
+  <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center py-3 relative">
+    <span class="text-sm font-bold text-shadow">#{{ "%03d"|format(pokemon.id) }}</span>
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 transform -skew-x-12"></div>
+  </div>
+
+  <!-- Pokemon Image with dark background -->
+  <div class="flex justify-center items-center bg-gradient-to-br from-gray-800 to-gray-900 py-6 relative">
+    <img
+      src="{{ pokemon.sprite }}"
+      alt="{{ pokemon.name }}"
+      class="w-40 h-40 drop-shadow-2xl filter brightness-110 contrast-110"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-20"></div>
+  </div>
+
+  <!-- Pokemon Info -->
+  <div class="p-4 space-y-3">
+    <h3 class="text-center text-lg font-bold text-white leading-tight text-shadow">
+      {{ pokemon.name }}
+    </h3>
+
+    <!-- Pokemon Types with enhanced glow -->
+    <div class="flex flex-wrap justify-center gap-2">
+      {% for type in pokemon.types %}
+      <span class="type-{{ type }} text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg transition duration-200 hover:scale-110">
+        {{ type.title() }}
+      </span>
+      {% endfor %}
     </div>
-    {% endfor %}
+
+    <!-- Pokemon Power with enhanced styling -->
+    <div class="text-center mt-3">
+      <div class="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-sm px-4 py-2 rounded-full font-bold shadow-lg">
+        ⚡ Power: {{ pokemon.power }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Click indicator -->
+  <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+    <div class="bg-white bg-opacity-20 rounded-full p-2">
+      <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Animated border effect -->
+  <div class="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 pointer-events-none hover:opacity-20"></div>
+</div>
+{% endfor %} {% if is_first_load %}
 </div>
 
-<div class="text-center mt-8">
-    <p class="text-gray-600">Showing {{ pokemon|length }} Pokemon</p>
-</div> 
+<!-- Stats and Load More Section with dark theme -->
+<div class="text-center mt-10 space-y-6">
+  <p class="text-gray-300 font-medium text-lg">✨ Showing {{ pokemon|length }} Amazing Pokémon</p>
+
+  {% if has_more %}
+  <button
+    hx-get="/pokemon?offset={{ next_offset }}"
+    hx-target="#pokemon-grid"
+    hx-swap="beforeend"
+    hx-indicator="#loading-more"
+    class="btn-glow text-white font-bold py-4 px-10 rounded-xl shadow-2xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50"
+  >
+    🔮 Load More Pokémon
+  </button>
+
+  <div id="loading-more" class="htmx-indicator mt-6">
+    <div class="inline-block loading-glow animate-spin rounded-full h-8 w-8 border-b-4 border-indigo-500"></div>
+    <p class="mt-3 text-gray-300 text-base">Summoning more Pokémon...</p>
+  </div>
+  {% endif %}
+</div>
+{% endif %}

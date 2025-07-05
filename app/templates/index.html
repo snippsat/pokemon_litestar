@@ -1,28 +1,26 @@
 {% extends "base.html" %} {% block content %}
-<div class="text-center mb-8">
-  <h2 class="text-4xl font-bold text-gray-800 mb-4">Welcome to the Pokédex!</h2>
-  <p class="text-xl text-gray-600 mb-6">
-    Click the button below to load Pokemon
+<div class="text-center mb-12">
+  <h2 class="text-5xl font-bold text-white mb-6 text-shadow">Welcome to the Dark Pokédex!</h2>
+  <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+    Discover amazing Pokémon with detailed information in this sleek dark interface
   </p>
 
   <button
     hx-get="/pokemon"
     hx-target="#pokemon-container"
     hx-indicator="#loading"
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 transform hover:scale-105"
+    class="btn-glow text-white font-bold py-4 px-10 rounded-xl shadow-2xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50"
   >
-    Load Pokemon
+    🚀 Load Pokémon
   </button>
 </div>
 
-<div id="loading" class="htmx-indicator text-center my-8">
-  <div
-    class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"
-  ></div>
-  <p class="mt-2 text-gray-600">Loading Pokemon...</p>
+<div id="loading" class="htmx-indicator text-center my-12">
+  <div class="inline-block loading-glow animate-spin rounded-full h-12 w-12 border-b-4 border-indigo-500"></div>
+  <p class="mt-4 text-gray-300 text-lg">Loading Pokémon from the depths...</p>
 </div>
 
-<div id="pokemon-container" class="mt-8">
+<div id="pokemon-container" class="mt-12">
   <!-- Pokemon will be loaded here via HTMX -->
 </div>
 {% endblock %}
