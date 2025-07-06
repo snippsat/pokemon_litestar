@@ -50,7 +50,10 @@ async def get_pokemon_list(offset: int = 0) -> Template:
             "pokemon": pokemon_list, 
             "has_more": has_more, 
             "next_offset": next_offset,
-            "is_first_load": offset == 0
+            "current_offset": offset,
+            "is_first_load": offset == 0,
+            "total_count": data["count"],
+            "total_loaded": offset + len(pokemon_list)
         }
     )
 
