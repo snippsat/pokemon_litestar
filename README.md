@@ -1,6 +1,6 @@
 # Pokemon Index - Litestar + HTMX + Tailwind
 
-Test of Pythob, Litestar, HTMX, and Tailwind CSS.
+Test of Python, Litestar, HTMX, and Tailwind CSS.
 
 ## Features
 
