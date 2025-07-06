@@ -1,6 +1,6 @@
 # Pokemon Index - Litestar + HTMX + Tailwind
 
-A simple Pokemon index application built with Litestar, HTMX, and Tailwind CSS.
+Test of Pythob, Litestar, HTMX, and Tailwind CSS.
 
 ## Features
 
